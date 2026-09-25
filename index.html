@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahsan | Portfolio</title>
+    <!-- Link to external CSS stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="logo">Ahsan.</div>
+
+    <div class="nav-tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch theme">☼</button>
+    
+    <!-- Animated Hamburger Toggle Icon Button -->
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+    </div>
+
+    <!-- Wrapped Navigation Links Menu -->
+    <div class="nav-menu" id="nav-menu">
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+    <!-- Home/Hero Section -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+           <div class="hero-badges">
+               <span>Available for freelance work</span>
+               <span>Product-first engineer</span>
+           </div>
+           <h1>Hi, I'm <span class="highlight">Ahsan</span></h1>
+           <p>Building elegant digital experiences and scalable systems that turn ideas into momentum.</p>
+           <div class="hero-actions">
+               <a href="#projects" class="btn">View My Work</a>
+               <a href="#contact" class="btn btn-secondary">Let's Talk</a>
+           </div>
+           <div class="hero-note"><span class="status-dot"></span> Currently taking on select projects for Q4 2026</div>
+           <div class="hero-stats">
+               <div>
+                   <strong>5+</strong>
+                   <span>Years building</span>
+               </div>
+               <div>
+                   <strong>18</strong>
+                   <span>Launches</span>
+               </div>
+               <div>
+                   <strong>100%</strong>
+                   <span>Focused on UX</span>
+               </div>
+           </div>
+       </div>
+   </header>
+
+   <!-- About Section -->
+   <section id="about" class="section">
+       <h2>About Me</h2>
+       <div class="about-text">
+           <p>I am a dedicated software engineer and web systems expert driven by a passion for 
+               architectural precision and elegant, human-centric design. Sitting firmly at the intersection
+                of complex backend engineering and rich user experiences, I specialize in transforming ambitious 
+                concept models into scalable, high-performance web applications. For me, development extends far
+                 beyond just writing syntactically sound code—it is about orchestrating robust database schemas,
+                  optimizing delivery channels for extreme performance, and engineering fluid user interfaces that
+                   operate with absolute transparency. I thrive on modern technology stacks, micro-services design 
+                   patterns, and clean structural methodologies that break down complex business rules into dependable,
+                    responsive web solutions. Constantly tracking and adopting industry innovations, I approach every 
+                     engineering pipeline with absolute dedication, strict testing principles, and a meticulous eye for 
+                     the creative subtleties that elevate digital execution to enterprise-grade excellence</p>
+       </div>
+        
+       <h3>My Skillset</h3>
+       <ul class="skills-list">
+           <li><strong>Frontend Mastery:</strong> HTML5, CSS3, JavaScript (ES6+), TypeScript, React, Next.js, Tailwind CSS</li>
+           <li><strong>Engineering Tools:</strong> Git, GitHub, VS Code, Chrome DevTools, Vite, NPM / PNPM Package Management</li>
+           <li><strong>Systems & Architecture:</strong> RESTful APIs, Node.js Environment, Responsive Interface Design, Web Optimization</li>
+       </ul>
+   </section>
+
+   <!-- Projects Section -->
+   <section id="projects" class="section bg-light">
+       <h2>Featured Projects</h2>
+       <div class="project-toolbar">
+           <div class="filter-group" role="group" aria-label="Filter projects">
+               <button class="filter-btn is-active" type="button" data-filter="all">All work</button>
+               <button class="filter-btn" type="button" data-filter="product">Products</button>
+               <button class="filter-btn" type="button" data-filter="platform">Platforms</button>
+               <button class="filter-btn" type="button" data-filter="content">Content</button>
+           </div>
+           <span class="project-count" id="project-count">04 projects</span>
+       </div>
+       <div class="project-grid">
+           <div class="project-card" data-category="product">
+               <div class="project-card-top">
+                   <span class="project-tag">E-Commerce</span>
+                   <span class="project-year">2026</span>
+               </div>
+               <h3>CommerceFlow</h3>
+               <p>A full-stack e-commerce platform with product discovery, secure checkout flows, and an admin dashboard for inventory and analytics.</p>
+               <ul class="tech-badges">
+                   <li>React</li>
+                   <li>Node</li>
+                   <li>Stripe</li>
+               </ul>
+               <a href="#" class="project-link">View Live Demo →</a>
+           </div>
+           <div class="project-card" data-category="platform">
+               <div class="project-card-top">
+                   <span class="project-tag">Scheduling</span>
+                   <span class="project-year">2026</span>
+               </div>
+               <h3>ReserveHub</h3>
+               <p>A booking and scheduling web app designed for service providers, featuring calendar management, appointment workflows, and automated reminders.</p>
+               <ul class="tech-badges">
+                   <li>Next.js</li>
+                   <li>Postgres</li>
+                   <li>Twilio</li>
+               </ul>
+               <a href="#" class="project-link">View Live Demo →</a>
+           </div>
+           <div class="project-card" data-category="platform">
+               <div class="project-card-top">
+                   <span class="project-tag">Analytics</span>
+                   <span class="project-year">2025</span>
+               </div>
+               <h3>PulseBoard</h3>
+               <p>A data-rich business dashboard for tracking KPIs, team performance, and trends using interactive charts and custom reporting views.</p>
+               <ul class="tech-badges">
+                   <li>TypeScript</li>
+                   <li>Charts</li>
+                   <li>API</li>
+               </ul>
+               <a href="#" class="project-link">View Live Demo →</a>
+           </div>
+           <div class="project-card" data-category="content">
+               <div class="project-card-top">
+                   <span class="project-tag">Marketing</span>
+                   <span class="project-year">2025</span>
+               </div>
+               <h3>BrandNarrative</h3>
+               <p>A content marketing portal that helps teams plan campaigns, publish articles, and measure engagement with streamlined editorial workflows.</p>
+               <ul class="tech-badges">
+                   <li>CMS</li>
+                   <li>SEO</li>
+                   <li>Content</li>
+               </ul>
+               <a href="#" class="project-link">View Live Demo →</a>
+           </div>
+       </div>
+   </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2>Get In Touch</h2>
+        <p>Have an idea or a project in mind? Let's build something great together.</p>
+        
+        <form id="contact-form" class="form-container">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+            <div class="form-footer">
+                <button type="submit" class="btn">Send Message <span aria-hidden="true">↗</span></button>
+                <span class="form-status" id="form-status" role="status" aria-live="polite"></span>
+            </div>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Ahsan. All rights reserved.</p>
+    </footer>
+
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
