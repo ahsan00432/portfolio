@@ -1,6 +1,5 @@
 /**
- * Ahsan's Upgraded Premium Portfolio Logic
- * Features: Canvas Particles, Typewriter Effect, Intersection Revelations, Form Handler, Mobile Toggle
+ * Portfolio interactions: ambient canvas, theme, project filters, contact form, and navigation.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ========================================================================== */
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
     // Inject canvas into the page structure dynamically
     canvas.style.position = 'fixed';
@@ -24,16 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const savedTheme = localStorage.getItem('portfolio-theme');
     if (savedTheme === 'light') document.body.classList.add('light-theme');
+    let isLightTheme = document.body.classList.contains('light-theme');
     if (themeToggle) {
         const updateThemeLabel = () => {
-            const isLight = document.body.classList.contains('light-theme');
-            themeToggle.textContent = isLight ? '☾' : '☼';
-            themeToggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+            themeToggle.textContent = isLightTheme ? '☾' : '☼';
+            themeToggle.setAttribute('aria-label', isLightTheme ? 'Switch to dark theme' : 'Switch to light theme');
         };
         updateThemeLabel();
         themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            localStorage.setItem('portfolio-theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+            isLightTheme = document.body.classList.toggle('light-theme');
+            localStorage.setItem('portfolio-theme', isLightTheme ? 'light' : 'dark');
             updateThemeLabel();
         });
     }
@@ -42,16 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const mouse = { x: null, y: null, radius: 150 };
 
     // Track mouse coordinates across the dark layout
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
+    if (window.matchMedia('(pointer: fine)').matches && !prefersReducedMotion) {
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
 
-    // Reset mouse when it leaves the browser window
-    window.addEventListener('mouseout', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+    }
 
     // Keep canvas perfectly responsive
     function resizeCanvas() {
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let dx = mouse.x - this.x;
                 let dy = mouse.y - this.y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < mouse.radius) {
+                if (distance > 0 && distance < mouse.radius) {
                     // Soft repelling push away from mouse cursor
                     let force = (mouse.radius - distance) / mouse.radius;
                     this.x -= (dx / distance) * force * 2;
@@ -96,7 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
         draw() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(16, 185, 129, 0.4)'; // Transparent Emerald Glow
+            ctx.fillStyle = isLightTheme
+                ? 'rgba(8, 127, 91, 0.18)'
+                : 'rgba(16, 185, 129, 0.4)';
             ctx.fill();
         }
     }
@@ -104,8 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function initParticles() {
         particles = [];
         // Calculate density dynamically based on screen resolution
-        const quantity = Math.floor((canvas.width * canvas.height) / 9000);
-        for (let i = 0; i < Math.min(quantity, 120); i++) {
+        const quantity = Math.floor((canvas.width * canvas.height) / 16000);
+        for (let i = 0; i < Math.min(quantity, 70); i++) {
             particles.push(new Particle());
         }
     }
@@ -120,8 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (distance < 110) {
                     // Line opacity fades out the further apart the particles get
-                    let alpha = ((110 - distance) / 110) * 0.15;
-                    ctx.strokeStyle = `rgba(16, 185, 129, ${alpha})`;
+                    let alpha = ((110 - distance) / 110) * (isLightTheme ? 0.08 : 0.15);
+                    ctx.strokeStyle = isLightTheme
+                        ? `rgba(8, 127, 91, ${alpha})`
+                        : `rgba(16, 185, 129, ${alpha})`;
                     ctx.lineWidth = 0.8;
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
@@ -134,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Persistent Loop Animation Execution Engine
     function animate() {
+        if (document.hidden || prefersReducedMotion) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach(p => {
             p.update();
@@ -147,31 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     initParticles();
-    animate();
+    if (!prefersReducedMotion) animate();
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && !prefersReducedMotion) animate();
+    });
 
 
     /* ==========================================================================
-       2. TYPEWRITER EFFECT (Hero Text Rendering)
-       ========================================================================== */
-    const heroPara = document.querySelector('.hero p');
-    if (heroPara) {
-        const originalText = heroPara.textContent;
-        heroPara.textContent = '';
-        
-        let index = 0;
-        function typeWriter() {
-            if (index < originalText.length) {
-                heroPara.textContent += originalText.charAt(index);
-                index++;
-                setTimeout(typeWriter, 50);
-            }
-        }
-        setTimeout(typeWriter, 600);
-    }
-
-
-    /* ==========================================================================
-       3. INTERSECTION SCROLL-REVEAL OBSERVER
+       2. INTERSECTION SCROLL-REVEAL OBSERVER
        ========================================================================== */
     const revealElements = document.querySelectorAll('.project-card, .skills-list li, .about-text');
     
@@ -195,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* ==========================================================================
-       4. NAV LINK ACTIVE STATES ON SCROLL
+       3. NAV LINK ACTIVE STATES ON SCROLL
        ========================================================================== */
     const sections = document.querySelectorAll('section, header');
     const navLinks = document.querySelectorAll('.nav-links a');
@@ -223,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* ==========================================================================
-       5. STANDARD VALIDATION FORM SUBMISSION (Only if using local handling)
+       4. CONTACT FORM SUBMISSION
        ========================================================================== */
     const contactForm = document.getElementById('contact-form');
     const formStatus = document.getElementById('form-status');
@@ -232,21 +221,38 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
             const submitBtn = contactForm.querySelector('button[type="submit"]');
 
             const originalBtnText = submitBtn.innerHTML;
             submitBtn.innerHTML = 'Sending...';
             submitBtn.disabled = true;
 
-            fetch('/api/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name,
-                    email: document.getElementById('email').value.trim(),
-                    message: document.getElementById('message').value.trim()
+            const isGitHubPages = window.location.hostname === 'ahsan00432.github.io';
+            const request = isGitHubPages
+                ? fetch('https://formsubmit.co/ajax/a3216572@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        message,
+                        _subject: `Portfolio message from ${name}`,
+                        _template: 'table',
+                        _captcha: 'false'
+                    })
                 })
-            }).then(response => response.json().then(data => ({ ok: response.ok, data })))
+                : fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, message })
+                });
+
+            request.then(response => response.json().then(data => ({ ok: response.ok, data })))
             .then(({ ok, data }) => {
                 if (!ok) throw new Error(data.error || 'Unable to send your message.');
                 contactForm.reset();
@@ -269,8 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const filter = button.dataset.filter;
             let visibleCount = 0;
-            filterButtons.forEach(item => item.classList.remove('is-active'));
-            button.classList.add('is-active');
+            filterButtons.forEach(item => {
+                const isActive = item === button;
+                item.classList.toggle('is-active', isActive);
+                item.setAttribute('aria-pressed', String(isActive));
+            });
             projectCards.forEach(card => {
                 const isVisible = filter === 'all' || card.dataset.category === filter;
                 card.hidden = !isVisible;
@@ -282,25 +291,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* ==========================================================================
-       6. SLEEK RESPONSIVE HAMBURGER NAVIGATION TOGGLE LOGIC
+       5. RESPONSIVE NAVIGATION
        ========================================================================== */
     const menuToggle = document.getElementById('menu-toggle');
     const navMenu = document.getElementById('nav-menu');
     const mobileLinks = document.querySelectorAll('.nav-links a');
 
     if (menuToggle && navMenu) {
-        // Toggle action on hamburger button press
+        const setMenuOpen = (isOpen) => {
+            menuToggle.classList.toggle('is-active', isOpen);
+            navMenu.classList.toggle('is-active', isOpen);
+            document.body.classList.toggle('menu-open', isOpen);
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
+            menuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+        };
+
         menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('is-active');
-            navMenu.classList.toggle('is-active');
+            setMenuOpen(menuToggle.getAttribute('aria-expanded') !== 'true');
         });
 
-        // Close full-frame drop shadow layout menu when an entry choice link is clicked
         mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('is-active');
-                navMenu.classList.remove('is-active');
-            });
+            link.addEventListener('click', () => setMenuOpen(false));
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') setMenuOpen(false);
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) setMenuOpen(false);
         });
     }
 });
