@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 _template: 'table'
             });
 
-            fetch('https://formsubmit.co/ajax/a3216572@gmail.com', {
+            fetch('https://formsubmit.co/ajax/2d05d5aad4c2bdf2c7e6399e56b1a5', {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' },
                 body: formData
