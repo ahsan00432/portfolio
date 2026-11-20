@@ -229,37 +229,28 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerHTML = 'Sending...';
             submitBtn.disabled = true;
 
-            const isGitHubPages = window.location.hostname === 'ahsan00432.github.io';
-            const request = isGitHubPages
-                ? fetch('https://formsubmit.co/ajax/a3216572@gmail.com', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        message,
-                        _subject: `Portfolio message from ${name}`,
-                        _template: 'table',
-                        _captcha: 'false'
-                    })
-                })
-                : fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, message })
-                });
+            const formData = new URLSearchParams({
+                name,
+                email,
+                message,
+                _subject: `Portfolio message from ${name}`,
+                _template: 'table'
+            });
 
-            request.then(response => response.json().then(data => ({ ok: response.ok, data })))
-            .then(({ ok, data }) => {
-                if (!ok) throw new Error(data.error || 'Unable to send your message.');
+            fetch('https://formsubmit.co/ajax/a3216572@gmail.com', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: formData
+            }).then(async response => {
+                const data = await response.json();
+                if (!response.ok || (data.success !== true && data.success !== 'true')) {
+                    throw new Error(data.message || 'Unable to send your message.');
+                }
                 contactForm.reset();
                 if (formStatus) formStatus.textContent = `Thanks, ${name}. I’ll be in touch soon.`;
             })
             .catch(error => {
-                if (formStatus) formStatus.textContent = error.message;
+                if (formStatus) formStatus.textContent = error.message || 'Unable to send your message. Please try again.';
             })
             .finally(() => {
                 submitBtn.innerHTML = originalBtnText;

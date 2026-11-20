@@ -173,11 +173,11 @@
         
         <form id="contact-form" class="form-container">
             <label for="name">Your name</label>
-            <input type="text" id="name" name="name" placeholder="Your Name" autocomplete="name" required>
+            <input type="text" id="name" name="name" placeholder="Your Name" autocomplete="name" maxlength="120" required>
             <label for="email">Your email</label>
-            <input type="email" id="email" name="email" placeholder="Your Email" autocomplete="email" required>
+            <input type="email" id="email" name="email" placeholder="Your Email" autocomplete="email" maxlength="254" required>
             <label for="message">Your message</label>
-            <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+            <textarea id="message" name="message" rows="5" placeholder="Your Message" maxlength="10000" required></textarea>
             <div class="form-footer">
                 <button type="submit" class="btn">Send Message <span aria-hidden="true">↗</span></button>
                 <span class="form-status" id="form-status" role="status" aria-live="polite"></span>
