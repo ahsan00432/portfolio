@@ -68,7 +68,7 @@ body.light-theme .hero-content::before {
     background: radial-gradient(circle at top, rgba(8, 127, 91, 0.07), transparent 52%);
 }
 body.light-theme .nav-menu { background-color: rgba(247, 249, 251, 0.98); }
-body.light-theme .navbar .logo {
+body.light-theme .navbar .logo-text {
     background-image: linear-gradient(135deg, #17212b 30%, #526170 100%);
 }
 body.light-theme .nav-links a:hover {
@@ -222,13 +222,32 @@ window-scrolled .navbar {
 }
 
 .navbar .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-size: 22px;
     font-weight: 800;
     letter-spacing: -0.5px;
+    color: var(--text-main);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navbar .logo img {
+    display: block;
+    width: 40px;
+    height: 40px;
+}
+
+.navbar .logo-text {
     background: linear-gradient(135deg, #ffffff 30%, var(--text-muted) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    cursor: default;
+}
+
+.navbar .logo-period {
+    color: var(--accent);
+    -webkit-text-fill-color: var(--accent);
 }
 
 .nav-tools { display: flex; align-items: center; gap: 12px; order: 3; }
@@ -363,6 +382,28 @@ body.light-theme .theme-toggle {
    font-weight: 800;
    position: relative;
    z-index: 1;
+   color: var(--text-main);
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+   .hero h1 {
+      color: transparent;
+      background-image: radial-gradient(circle, var(--text-main) 1.1px, transparent 1.3px);
+      background-size: 5px 5px;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+   }
+
+   .hero h1 .highlight {
+      color: transparent;
+      background-image: radial-gradient(circle, var(--accent) 1.1px, transparent 1.3px);
+      background-size: 5px 5px;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+   }
 }
 
 .hero p {
@@ -436,6 +477,11 @@ body.light-theme .theme-toggle {
    margin-bottom: 30px;
    display: inline-block;
    position: relative;
+}
+
+.section h2,
+.section h3 {
+   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 .section > p {
